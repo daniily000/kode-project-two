@@ -11,6 +11,9 @@ import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.NAME
 import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.PHOTO
 import kotlinx.android.synthetic.main.activity_after_capture.*
 import java.io.File
+import android.graphics.BitmapFactory
+
+
 
 
 class AfterCaptureActivity : AppCompatActivity() {
@@ -37,6 +40,11 @@ class AfterCaptureActivity : AppCompatActivity() {
         )
 
         signTextView.text = name
+
+        val options = BitmapFactory.Options()
+        options.inSampleSize = 16
+        blurredImageView.setImageBitmap(BitmapFactory.decodeFile(photoPath, options))
+
 
     }
 
