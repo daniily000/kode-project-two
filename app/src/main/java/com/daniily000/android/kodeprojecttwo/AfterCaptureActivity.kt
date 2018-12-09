@@ -1,17 +1,82 @@
 package com.daniily000.android.kodeprojecttwo
 
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.support.media.ExifInterface
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.provider.MediaStore
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.PHOTO
+import kotlinx.android.synthetic.main.activity_after_capture.*
+import java.io.File
+
 
 class AfterCaptureActivity : AppCompatActivity() {
 
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_after_capture)
 
+        val photoPath = intent.getStringExtra(PHOTO)
+
+        val uriFromProvider = FileProvider.getUriForFile(
+            this,
+            "$packageName.fileprovider",
+            File(photoPath)
+        )
+
+        imageView.setImageBitmap(
+            validateBitmap(
+                MediaStore.Images.Media.getBitmap(contentResolver, uriFromProvider),
+                photoPath
+            )
+        )
 
     }
 
+
+    private fun validateBitmap(bitmap: Bitmap, path: String): Bitmap {
+
+        val ei = ExifInterface(path)
+        val orientation = ei.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
+
+        return when (orientation) {
+
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(bitmap, 90f)
+
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(bitmap, 180f)
+
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(bitmap, 270f)
+
+            ExifInterface.ORIENTATION_NORMAL -> bitmap
+            else -> bitmap
+        }
+    }
+
+    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
+
+        var bitmap = source
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+        try {
+            bitmap = Bitmap.createBitmap(
+                source, 0, 0, source.width, source.height,
+                matrix, true
+            )
+        } catch (err: OutOfMemoryError) {
+            err.printStackTrace()
+        }
+
+        return bitmap
+    }
+
+    companion object {
+        private const val TAG = "AfterCaptureActivity"
+    }
 
 }
