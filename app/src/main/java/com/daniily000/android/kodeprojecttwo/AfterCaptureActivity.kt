@@ -12,6 +12,10 @@ import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.PHOTO
 import kotlinx.android.synthetic.main.activity_after_capture.*
 import java.io.File
 import android.graphics.BitmapFactory
+import android.view.View
+import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+
 
 
 
@@ -22,6 +26,9 @@ class AfterCaptureActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_after_capture)
+
+        // hide hardware buttons and status bar
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
 
         val photoPath = intent.getStringExtra(PHOTO)
         val name = intent.getStringExtra(NAME)
