@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.design.widget.Snackbar
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -27,50 +28,59 @@ class MainActivity : AppCompatActivity() {
 
         captureButton.setOnClickListener {
 
-            val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (captureIntent.resolveActivity(packageManager) != null) {
+            // no text specified
+            if (nameText.text.toString() == "") {
+                Snackbar.make(nameText, R.string.noNameWarning, Snackbar.LENGTH_LONG).show()
+            } else {
 
-                try {
-                    photoFile = File.createTempFile("photo_${Date().time}", ".jpg", this.filesDir)
-                    Log.i(TAG, "file=${photoFile?.absolutePath}")
-                    Log.i(TAG, "filesDir=$filesDir")
-                    Log.i(TAG, "packageName=$packageName")
+                val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                if (captureIntent.resolveActivity(packageManager) != null) {
+
+                    try {
+                        photoFile = File.createTempFile("photo_${Date().time}", ".jpg", this.filesDir)
+                        Log.i(TAG, "file=${photoFile?.absolutePath}")
+                        Log.i(TAG, "filesDir=$filesDir")
+                        Log.i(TAG, "packageName=$packageName")
 
 
-                    photoFile.createNewFile()
+                        photoFile.createNewFile()
 
-                    mUriFromProvider = FileProvider.getUriForFile(
-                        this,
-                        "$packageName.fileprovider",
-                        photoFile
-                    )
+                        mUriFromProvider = FileProvider.getUriForFile(
+                            this,
+                            "$packageName.fileprovider",
+                            photoFile
+                        )
 
-                    Log.i(TAG, "uri=$mUriFromProvider")
+                        Log.i(TAG, "uri=$mUriFromProvider")
 
-                    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mUriFromProvider)
-                    startActivityForResult(captureIntent, REQUEST_CAMERA)
-                } catch (e: IOException) {
-                    e.printStackTrace()
+                        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mUriFromProvider)
+                        startActivityForResult(captureIntent, REQUEST_CAMERA)
+                    } catch (e: IOException) {
+                        e.printStackTrace()
 
+                    }
                 }
             }
         }
     }
 
+    // save instances
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putString(NAME, nameText.text.toString())
+        outState?.putString(NAME_VALUE, nameText.text.toString())
         if (mUriFromProvider != null) {
             outState?.putParcelable(URI, mUriFromProvider)
         }
     }
 
+    // restore instances
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-        nameText.setText(savedInstanceState?.getString(NAME))
+        nameText.setText(savedInstanceState?.getString(NAME_VALUE))
         mUriFromProvider = savedInstanceState?.getParcelable(URI)
     }
 
+    // call AfterCaptureActivity if OK, respond if not
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -86,12 +96,17 @@ class MainActivity : AppCompatActivity() {
                             PHOTO,
                             photoFile.absolutePath
                         )
+                        afterCaptureIntent.putExtra(
+                            NAME,
+                            nameText.text.toString()
+                        )
+
                         startActivity(afterCaptureIntent)
                     }
 
                     Activity.RESULT_CANCELED -> {
                         Log.i(TAG, "REQUEST_CAMERA -> RESULT_CANCELLED")
-//                        TODO()
+                        Snackbar.make(rootViewGroup, R.string.photoCancel, Snackbar.LENGTH_LONG).show()
                     }
 
                     else -> {
@@ -107,11 +122,12 @@ class MainActivity : AppCompatActivity() {
     companion object {
 
         private const val TAG = "MainActivity"
-        private const val NAME = "name"
+        private const val NAME_VALUE = "name"
         private const val REQUEST_CAMERA = 0
 
         const val URI = "uri"
-        const val PHOTO = "uri"
+        const val PHOTO = "photo"
+        const val NAME = "name"
     }
 
 

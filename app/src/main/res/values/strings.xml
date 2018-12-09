@@ -2,4 +2,6 @@
     <string name="nameHint">Name</string>
     <string name="capture">Capture</string>
     <string name="app_name" translatable="false">Kode Project Two</string>
+    <string name="photoCancel">The photo capture has been cancelled</string>
+    <string name="noNameWarning">Please, specify your name</string>
 </resources>

@@ -2,4 +2,6 @@
 <resources>
     <string name="nameHint">Имя</string>
     <string name="capture">Фото</string>
+    <string name="photoCancel">Захват изображения был остановлен</string>
+    <string name="noNameWarning">Пожалуйста, укажите имя</string>
 </resources>

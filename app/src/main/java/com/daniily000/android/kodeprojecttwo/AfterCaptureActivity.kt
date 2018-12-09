@@ -2,11 +2,12 @@ package com.daniily000.android.kodeprojecttwo
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.support.media.ExifInterface
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.media.ExifInterface
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.NAME
 import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.PHOTO
 import kotlinx.android.synthetic.main.activity_after_capture.*
 import java.io.File
@@ -20,6 +21,7 @@ class AfterCaptureActivity : AppCompatActivity() {
         setContentView(R.layout.activity_after_capture)
 
         val photoPath = intent.getStringExtra(PHOTO)
+        val name = intent.getStringExtra(NAME)
 
         val uriFromProvider = FileProvider.getUriForFile(
             this,
@@ -33,6 +35,8 @@ class AfterCaptureActivity : AppCompatActivity() {
                 photoPath
             )
         )
+
+        signTextView.text = name
 
     }
 
