@@ -4,4 +4,5 @@
     <string name="capture">Фото</string>
     <string name="photoCancel">Захват изображения был остановлен</string>
     <string name="noNameWarning">Пожалуйста, укажите имя</string>
+    <string name="unableToCreatePhotoFile">Невозможно создать файл для фото. Пожалуйста, проверьте доступ приложения к его файлам.</string>
 </resources>

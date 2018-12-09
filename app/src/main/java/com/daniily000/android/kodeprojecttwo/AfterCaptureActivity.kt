@@ -1,23 +1,18 @@
 package com.daniily000.android.kodeprojecttwo
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.media.ExifInterface
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.NAME
 import com.daniily000.android.kodeprojecttwo.MainActivity.Companion.PHOTO
 import kotlinx.android.synthetic.main.activity_after_capture.*
 import java.io.File
-import android.graphics.BitmapFactory
-import android.view.View
-import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-
-
-
-
 
 
 class AfterCaptureActivity : AppCompatActivity() {

@@ -38,26 +38,22 @@ class MainActivity : AppCompatActivity() {
 
                     try {
                         mPhotoFile = File.createTempFile("photo_${Date().time}", ".jpg", this.filesDir)
-                        Log.i(TAG, "file=${mPhotoFile.absolutePath}")
-                        Log.i(TAG, "filesDir=$filesDir")
-                        Log.i(TAG, "packageName=$packageName")
-
-
                         mPhotoFile.createNewFile()
-
                         mUriFromProvider = FileProvider.getUriForFile(
                             this,
                             "$packageName.fileprovider",
                             mPhotoFile
                         )
 
-                        Log.i(TAG, "uri=$mUriFromProvider")
-
                         captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mUriFromProvider)
                         startActivityForResult(captureIntent, REQUEST_CAMERA)
                     } catch (e: IOException) {
                         e.printStackTrace()
-
+                        Snackbar.make(
+                            rootViewGroup,
+                            getString(R.string.unableToCreatePhotoFile),
+                            Snackbar.LENGTH_INDEFINITE
+                        )
                     }
                 }
             }
@@ -112,7 +108,6 @@ class MainActivity : AppCompatActivity() {
                     else -> {
                         Log.wtf(TAG, "REQUEST_CAMERA -> else!? Crushing result")
                     }
-
                 }
             }
         }

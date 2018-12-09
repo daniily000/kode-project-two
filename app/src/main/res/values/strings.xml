@@ -4,4 +4,5 @@
     <string name="app_name" translatable="false">Kode Project Two</string>
     <string name="photoCancel">The photo capture has been cancelled</string>
     <string name="noNameWarning">Please, specify your name</string>
+    <string name="unableToCreatePhotoFile">Unable to create a file for photo. Please check the accessibility for application files.</string>
 </resources>
