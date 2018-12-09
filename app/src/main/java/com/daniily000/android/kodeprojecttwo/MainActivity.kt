@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private var mUriFromProvider: Uri? = null
-    private lateinit var photoFile: File
+    private lateinit var mPhotoFile: File
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,18 +37,18 @@ class MainActivity : AppCompatActivity() {
                 if (captureIntent.resolveActivity(packageManager) != null) {
 
                     try {
-                        photoFile = File.createTempFile("photo_${Date().time}", ".jpg", this.filesDir)
-                        Log.i(TAG, "file=${photoFile?.absolutePath}")
+                        mPhotoFile = File.createTempFile("photo_${Date().time}", ".jpg", this.filesDir)
+                        Log.i(TAG, "file=${mPhotoFile.absolutePath}")
                         Log.i(TAG, "filesDir=$filesDir")
                         Log.i(TAG, "packageName=$packageName")
 
 
-                        photoFile.createNewFile()
+                        mPhotoFile.createNewFile()
 
                         mUriFromProvider = FileProvider.getUriForFile(
                             this,
                             "$packageName.fileprovider",
-                            photoFile
+                            mPhotoFile
                         )
 
                         Log.i(TAG, "uri=$mUriFromProvider")
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                         val afterCaptureIntent = Intent(this, AfterCaptureActivity::class.java)
                         afterCaptureIntent.putExtra(
                             PHOTO,
-                            photoFile.absolutePath
+                            mPhotoFile.absolutePath
                         )
                         afterCaptureIntent.putExtra(
                             NAME,
